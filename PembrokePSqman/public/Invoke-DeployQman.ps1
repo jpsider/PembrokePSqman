@@ -26,8 +26,8 @@ function Invoke-DeployQman
             New-Item -Path "$Destination\qman\data" -ItemType Directory
             New-Item -Path "$Destination\qman\logs" -ItemType Directory
         }
-        Install-Module -Name PembrokePSrest,PembrokePSutilities,PowerLumber -Force
-        Import-Module -Name PembrokePSrest,PembrokePSutilities,PowerLumber -Force
+        Install-Module -Name PembrokePSrest,PembrokePSutilities,PowerLumber,RestPS -Force
+        Import-Module -Name PembrokePSrest,PembrokePSutilities,PowerLumber,RestPS -Force
         Invoke-CreateRouteDirectorySet -InstallDirectory "$Destination\Qman\rest"
         Copy-Item -Path "$Source\data\pembrokeps.properties" -Destination "$Destination\qman\data" -Confirm:$false       
     }

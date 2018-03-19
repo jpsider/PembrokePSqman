@@ -1,7 +1,7 @@
 function Invoke-AssignTask {
     <#
 	.DESCRIPTION
-		This function will gather Status information from PembrokePS web/rest for a Queue_Manager
+		This function will Assign a task to a specific WorkFlow Manager.
     .PARAMETER TaskId
         A TaskId is required.
     .PARAMETER RestServer
@@ -26,7 +26,10 @@ function Invoke-AssignTask {
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
-            $body = @{STATUS_ID = "7"} | convertto-json
+            $TableName = $TableName.ToLower()
+            $body = @{STATUS_ID = "7"
+                        WORKFLOW_MANAGER_ID = "$WmanId"
+                    } 
             $RestReturn = Invoke-RestMethod -Method Put -Uri "http://$RestServer/PembrokePS/public/api/api.php/$TableName/$TaskId" -body $body
         }
         catch

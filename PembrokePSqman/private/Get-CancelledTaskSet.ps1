@@ -1,13 +1,13 @@
-function Get-AvailableWmanSet {
+function Get-CancelledTaskSet {
     <#
 	.DESCRIPTION
-		This function will gather available Workflow Managers that are of a specified type.
+		This function will gather the cancelled tasks for the specified TableName.
     .PARAMETER RestServer
         A Rest Server is required.
-    .PARAMETER Wman_Type
-        A Wman_Type is required.
+    .PARAMETER TableName
+        A TableName is optional, default is tasks.
 	.EXAMPLE
-        Get-AvailableWmanSet -RestServer localhost -Wman_Type 1
+        Get-CancelledTaskSet -RestServer localhost -TableName tasks
 	.NOTES
         This will return a hashtable of data from the PPS database.
     #>
@@ -15,12 +15,13 @@ function Get-AvailableWmanSet {
     [OutputType([hashtable])]
     param(
         [Parameter(Mandatory=$true)][string]$RestServer,
-        [Parameter(Mandatory=$true)][int]$Wman_Type
+        [string]$TableName="tasks"
     )
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
-            $WmanStatusData = (Invoke-RestMethod -Method Get -Uri "http://$RestServer/PembrokePS/public/api/api.php/workflow_manager?filter[]=status_id,eq,2&filter[]=WORKFLOW_MANAGER_TYPE_ID,eq,$Wman_Type&transform=1" -UseBasicParsing).workflow_manager
+            $TableName = $TableName.ToLower()
+            $SubmittedTasks = (Invoke-RestMethod -Method Get -Uri "http://$RestServer/PembrokePS/public/api/api.php/$TableName?filter=STATUS_ID,eq,10&transform=1" -UseBasicParsing).$TableName
         }
         catch
         {
@@ -28,7 +29,7 @@ function Get-AvailableWmanSet {
             $FailedItem = $_.Exception.ItemName		
             Throw "Error: $ErrorMessage $FailedItem"
         }
-        $WmanStatusData
+        $SubmittedTasks
     } else {
         Throw "Unable to reach web server."
     }

@@ -32,6 +32,8 @@ Describe "Start-Qman function for $moduleName" {
         Mock -CommandName 'Test-Connection' -MockWith {
             $true
         }
+        Mock -CommandName 'Write-Output' -MockWith {}
         Start-Qman -RestServer dummyServer -whatif| Should be $false
+        Assert-MockCalled -CommandName 'Write-Output' -Times 2 -Exactly
     }
 }

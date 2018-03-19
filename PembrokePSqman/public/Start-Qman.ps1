@@ -20,19 +20,22 @@ function Start-Qman {
     )
     begin {
         if (Test-Connection -Count 1 $RestServer -Quiet) {
-            # No Action needed if the RestServer can be reached.
+            # Gather the local properties
         } else {
             Throw "Unable to reach web server."
         }
     }
     process
     {
-        if ($pscmdlet.ShouldProcess("Creating Headers."))
+        if ($pscmdlet.ShouldProcess("PembrokePSQman"))
         {
             try
             {
                 #Going to be creating a new record here, need to figure out the 'joins' to ensure the data is good.
                 Write-Output "This function is not complete!"
+                # Validate properties file
+                # Validate system.RestServer
+                # Start Invoke-Qman
             }
             catch
             {
@@ -40,7 +43,6 @@ function Start-Qman {
                 $FailedItem = $_.Exception.ItemName		
                 Throw "Error: $ErrorMessage $FailedItem"
             }
-            #$QmanStatusData
         }
         else
         {

@@ -1,12 +1,13 @@
 $script:ModuleName = 'PembrokePSqman'
 
-Describe "Get-AvailableWmanSet function for $moduleName" {
+Describe "Invoke-AbortCancelledTaskSet function for $moduleName" {
+    function Invoke-UpdateTaskTable{}
     It "Should not be null" {
         $RawReturn = @{
-            workflow_manager = @{
+            tasks = @{
                 ID            = '1'
-                STATUS_ID     = '1'
-                WAIT       = '300'
+                STATUS_ID     = '10'
+                RESULT_ID       = '3'
             }               
         }
         $ReturnJson = $RawReturn | ConvertTo-Json
@@ -14,29 +15,33 @@ Describe "Get-AvailableWmanSet function for $moduleName" {
         Mock -CommandName 'Test-Connection' -MockWith {
             $true
         }
-        Mock -CommandName 'Invoke-RestMethod' -MockWith {
+        Mock -CommandName 'Get-CancelledTaskSet' -MockWith {
             $ReturnData
         }
-        Get-AvailableWmanSet -RestServer localhost -Wman_Type 1 | Should not be $null
+        Mock -CommandName 'Invoke-UpdateTaskTable' -MockWith {
+            1
+        }
+        Invoke-AbortCancelledTaskSet -RestServer localhost -TableName tasks | Should not be $null
         Assert-MockCalled -CommandName 'Test-Connection' -Times 1 -Exactly
-        Assert-MockCalled -CommandName 'Invoke-RestMethod' -Times 1 -Exactly
+        Assert-MockCalled -CommandName 'Invoke-UpdateTaskTable' -Times 1 -Exactly
+        Assert-MockCalled -CommandName 'Get-CancelledTaskSet' -Times 1 -Exactly
     }
     It "Should Throw if the Rest Server cannot be reached.." {
         Mock -CommandName 'Test-Connection' -MockWith {
             $false
         }
-        {Get-AvailableWmanSet -RestServer localhost -Wman_Type 1} | Should -Throw
+        {Invoke-AbortCancelledTaskSet -RestServer localhost -TableName tasks} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 2 -Exactly
     }
     It "Should Throw if the ID is not valid." {
         Mock -CommandName 'Test-Connection' -MockWith {
             $true
         }
-        Mock -CommandName 'Invoke-RestMethod' -MockWith { 
+        Mock -CommandName 'Get-CancelledTaskSet' -MockWith {
             Throw "(404) Not Found"
         }
-        {Get-AvailableWmanSet -RestServer localhost -Wman_Type 1} | Should -Throw
+        {Invoke-AbortCancelledTaskSet -RestServer localhost -TableName tasks} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 3 -Exactly
-        Assert-MockCalled -CommandName 'Invoke-RestMethod' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Get-CancelledTaskSet' -Times 2 -Exactly
     }
 }

@@ -1,13 +1,9 @@
 $script:ModuleName = 'PembrokePSqman'
 
-Describe "Get-AvailableWmanSet function for $moduleName" {
+Describe "Get-QmanTableName function for $moduleName" {
     It "Should not be null" {
         $RawReturn = @{
-            workflow_manager = @{
-                ID            = '1'
-                STATUS_ID     = '1'
-                WAIT       = '300'
-            }               
+                TABLENAME            = 'tasks'
         }
         $ReturnJson = $RawReturn | ConvertTo-Json
         $ReturnData = $ReturnJson | convertfrom-json
@@ -17,7 +13,7 @@ Describe "Get-AvailableWmanSet function for $moduleName" {
         Mock -CommandName 'Invoke-RestMethod' -MockWith {
             $ReturnData
         }
-        Get-AvailableWmanSet -RestServer localhost -Wman_Type 1 | Should not be $null
+        Get-QmanTableName -RestServer localhost -Type_ID 1 | Should be "tasks"
         Assert-MockCalled -CommandName 'Test-Connection' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-RestMethod' -Times 1 -Exactly
     }
@@ -25,7 +21,7 @@ Describe "Get-AvailableWmanSet function for $moduleName" {
         Mock -CommandName 'Test-Connection' -MockWith {
             $false
         }
-        {Get-AvailableWmanSet -RestServer localhost -Wman_Type 1} | Should -Throw
+        {Get-QmanTableName -RestServer localhost -Type_ID 1} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 2 -Exactly
     }
     It "Should Throw if the ID is not valid." {
@@ -35,7 +31,7 @@ Describe "Get-AvailableWmanSet function for $moduleName" {
         Mock -CommandName 'Invoke-RestMethod' -MockWith { 
             Throw "(404) Not Found"
         }
-        {Get-AvailableWmanSet -RestServer localhost -Wman_Type 1} | Should -Throw
+        {Get-QmanTableName -RestServer localhost -Type_ID 1} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 3 -Exactly
         Assert-MockCalled -CommandName 'Invoke-RestMethod' -Times 2 -Exactly
     }

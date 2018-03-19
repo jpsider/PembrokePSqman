@@ -14,13 +14,13 @@ function Get-QmanStatus {
     [CmdletBinding()]
     [OutputType([hashtable])]
     param(
-        [int]$ComponentId,
-        [string]$RestServer
+        [Parameter(Mandatory=$true)][int]$ComponentId,
+        [Parameter(Mandatory=$true)][string]$RestServer
     )
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
-            $QmanStatusData = Get-ComponentStatus -ComponentType Queue_Manager -ComponentId $ComponentId -RestServer $RestServer
+            $ComponentStatusData = Get-ComponentStatus -ComponentType Queue_Manager -ComponentId $ComponentId -RestServer $RestServer
         }
         catch
         {
@@ -28,7 +28,7 @@ function Get-QmanStatus {
             $FailedItem = $_.Exception.ItemName		
             Throw "Error: $ErrorMessage $FailedItem"
         }
-        $QmanStatusData
+        $ComponentStatusData
     } else {
         Throw "Unable to reach web server."
     }

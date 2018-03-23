@@ -21,7 +21,8 @@ function Get-SubmittedTaskSet {
         try
         {
             $TableName = $TableName.ToLower()
-            $SubmittedTasks = (Invoke-RestMethod -Method Get -Uri "http://$RestServer/PembrokePS/public/api/api.php/$TableName?filter=STATUS_ID,eq,5&transform=1" -UseBasicParsing).$TableName
+            $URL = "http://$RestServer/PembrokePS/public/api/api.php/$TableName" + "?filter=STATUS_ID,eq,5&transform=1"
+            $SubmittedTasks = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).$TableName
         }
         catch
         {

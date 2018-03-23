@@ -35,7 +35,6 @@ function Invoke-QmanStartupTaskSet {
             $FailedItem = $_.Exception.ItemName		
             Throw "Error: $ErrorMessage $FailedItem"
         }
-        $ReturnMessage = $true
         $ReturnMessage
     } else {
         Throw "Unable to reach web server."

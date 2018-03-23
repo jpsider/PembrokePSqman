@@ -21,7 +21,8 @@ function Get-CancelledTaskSet {
         try
         {
             $TableName = $TableName.ToLower()
-            $SubmittedTasks = (Invoke-RestMethod -Method Get -Uri "http://$RestServer/PembrokePS/public/api/api.php/$TableName?filter=STATUS_ID,eq,10&transform=1" -UseBasicParsing).$TableName
+            $URL = "http://$RestServer/PembrokePS/public/api/api.php/$TableName" + "?filter=STATUS_ID,eq,10&transform=1"
+            $CancelledTasks = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).$TableName
         }
         catch
         {
@@ -29,7 +30,7 @@ function Get-CancelledTaskSet {
             $FailedItem = $_.Exception.ItemName		
             Throw "Error: $ErrorMessage $FailedItem"
         }
-        $SubmittedTasks
+        $CancelledTasks
     } else {
         Throw "Unable to reach web server."
     }

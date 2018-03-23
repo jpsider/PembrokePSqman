@@ -44,7 +44,6 @@ function Invoke-AbortCancelledTaskSet {
             $FailedItem = $_.Exception.ItemName		
             Throw "Error: $ErrorMessage $FailedItem"
         }
-        $RestReturn = $true
         $RestReturn
     } else {
         Throw "Unable to reach web server."

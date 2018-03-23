@@ -20,7 +20,8 @@ function Get-AvailableWmanType {
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
-            $WmanTypeData = (Invoke-RestMethod -Method Get -Uri "http://$RestServer/PembrokePS/public/api/api.php/wman_task_types?filter[]=TASK_TYPE_ID,eq,$TaskTypeId&filter[]=STATUS_ID,eq,11&transform=1" -UseBasicParsing).wman_task_types
+            $URL = "http://$RestServer/PembrokePS/public/api/api.php/wman_task_types" + "?filter[]=TASK_TYPE_ID,eq,$TaskTypeId&filter[]=STATUS_ID,eq,11&transform=1"
+            $WmanTypeData = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).wman_task_types
         }
         catch
         {

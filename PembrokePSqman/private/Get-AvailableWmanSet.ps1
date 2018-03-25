@@ -26,7 +26,7 @@ function Get-AvailableWmanSet {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Get-AvailableWmanSet: $ErrorMessage $FailedItem"
         }
         $WmanStatusData
     } else {

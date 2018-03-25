@@ -33,7 +33,7 @@ function Invoke-QmanStartupTaskSet {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Invoke-QmanStartupTaskSet: $ErrorMessage $FailedItem"
         }
         $ReturnMessage
     } else {

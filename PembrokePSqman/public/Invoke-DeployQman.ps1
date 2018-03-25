@@ -35,7 +35,7 @@ function Invoke-DeployQman
     {
         $ErrorMessage = $_.Exception.Message
         $FailedItem = $_.Exception.ItemName		
-        Write-Error "Error: $ErrorMessage $FailedItem"
+        Write-Error "Invoke-DeployQman: $ErrorMessage $FailedItem"
         Throw $_
     }
 

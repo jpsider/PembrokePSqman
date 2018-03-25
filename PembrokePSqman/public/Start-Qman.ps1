@@ -41,7 +41,7 @@ function Start-Qman {
             {
                 $ErrorMessage = $_.Exception.Message
                 $FailedItem = $_.Exception.ItemName		
-                Throw "Error: $ErrorMessage $FailedItem"
+                Throw "Start-Qman: $ErrorMessage $FailedItem"
             }
         }
         else

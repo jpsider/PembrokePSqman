@@ -42,7 +42,7 @@ function Invoke-AbortCancelledTaskSet {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Invoke-AbortCancelledTaskSet: $ErrorMessage $FailedItem"
         }
         $RestReturn
     } else {

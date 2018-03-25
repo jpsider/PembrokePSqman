@@ -32,7 +32,7 @@ function Get-ActiveWmanTaskSet {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Get-ActiveWmanTaskSet: $ErrorMessage $FailedItem"
         }
         $ActiveWmanTasks
     } else {

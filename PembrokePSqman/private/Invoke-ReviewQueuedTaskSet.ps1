@@ -60,7 +60,7 @@ function Invoke-ReviewQueuedTaskSet {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Invoke-ReviewQueuedTaskSet: $ErrorMessage $FailedItem"
         }
         $ReturnMessage
     } else {

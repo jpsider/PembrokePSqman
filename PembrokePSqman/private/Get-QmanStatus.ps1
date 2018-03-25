@@ -26,7 +26,7 @@ function Get-QmanStatus {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Get-QmanStatus: $ErrorMessage $FailedItem"
         }
         $ComponentStatusData
     } else {

@@ -27,7 +27,7 @@ function Get-AvailableWmanType {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Get-AvailableWmanType: $ErrorMessage $FailedItem"
         }
         $WmanTypeData
     } else {

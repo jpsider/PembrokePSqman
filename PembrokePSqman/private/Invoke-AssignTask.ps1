@@ -36,7 +36,7 @@ function Invoke-AssignTask {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Invoke-AssignTask: $ErrorMessage $FailedItem"
         }
         $RestReturn
     } else {

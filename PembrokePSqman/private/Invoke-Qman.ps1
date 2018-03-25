@@ -93,7 +93,7 @@ function Invoke-Qman {
     {
         $ErrorMessage = $_.Exception.Message
         $FailedItem = $_.Exception.ItemName		
-        Throw "Error: $ErrorMessage $FailedItem"
+        Throw "Invoke-Qman: $ErrorMessage $FailedItem"
     }
     
 }

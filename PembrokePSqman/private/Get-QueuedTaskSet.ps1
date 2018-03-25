@@ -28,7 +28,7 @@ function Get-QueuedTaskSet {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Get-QueuedTaskSet: $ErrorMessage $FailedItem"
         }
         $SubmittedTasks
     } else {

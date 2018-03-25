@@ -36,7 +36,7 @@ function Invoke-UpdateQmanData {
         {
             $ErrorMessage = $_.Exception.Message
             $FailedItem = $_.Exception.ItemName		
-            Throw "Error: $ErrorMessage $FailedItem"
+            Throw "Invoke-UpdateQmanData: $ErrorMessage $FailedItem"
         }
     } else {
         Throw "Unable to reach web server."

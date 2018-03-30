@@ -33,9 +33,11 @@ function Start-Qman {
             {
                 #Going to be creating a new record here, need to figure out the 'joins' to ensure the data is good.
                 Write-Output "This function is not complete!"
-                # Validate properties file
+                # Validate properties file exists
+                # Import all the data.
                 # Validate system.RestServer
-                # Start Invoke-Qman
+                # Start Kicker process
+                # Start Rest Service (and kicker rest)
             }
             catch
             {

@@ -29,8 +29,11 @@ function Invoke-AssignTask {
             $TableName = $TableName.ToLower()
             $body = @{STATUS_ID = "7"
                         WORKFLOW_MANAGER_ID = "$WmanId"
-                    } 
-            $RestReturn = Invoke-RestMethod -Method Put -Uri "http://$RestServer/PembrokePS/public/api/api.php/$TableName/$TaskId" -body $body
+                    }
+            Write-LogLevel -Message "Assigning task: $TaskId, to Wman: $WmanId, table: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
+            $URL = "http://$RestServer/PembrokePS/public/api/api.php/$TableName/$TaskId"
+            Write-LogLevel -Message "URL is: $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
+            $RestReturn = Invoke-RestMethod -Method Put -Uri "$URL" -body $body
         }
         catch
         {
@@ -40,7 +43,7 @@ function Invoke-AssignTask {
         }
         $RestReturn
     } else {
-        Throw "Unable to reach web server."
+        Throw "Invoke-AssignTask: Unable to reach Rest server: $RestServer."
     }
     
 }

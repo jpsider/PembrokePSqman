@@ -20,7 +20,9 @@ function Get-AvailableWmanType {
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
+            Write-LogLevel -Message "Gathering Available Wman type based on task type: $TaskTypeId" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
             $URL = "http://$RestServer/PembrokePS/public/api/api.php/wman_task_types" + "?filter[]=TASK_TYPE_ID,eq,$TaskTypeId&filter[]=STATUS_ID,eq,11&transform=1"
+            Write-LogLevel -Message "the URL is: $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
             $WmanTypeData = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).wman_task_types
         }
         catch
@@ -31,7 +33,7 @@ function Get-AvailableWmanType {
         }
         $WmanTypeData
     } else {
-        Throw "Unable to reach web server."
+        Throw "Get-AvailableWmanType: Unable to reach Rest server: $RestServer."
     }
     
 }

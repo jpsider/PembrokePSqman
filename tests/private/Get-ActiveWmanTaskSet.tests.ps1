@@ -1,6 +1,7 @@
 $script:ModuleName = 'PembrokePSqman'
 
 Describe "Get-ActiveWmanTaskSet function for $moduleName" {
+    function Write-LogLevel{}
     It "Should not be null" {
         $RawReturn = @{
             tasks = @{
@@ -18,16 +19,20 @@ Describe "Get-ActiveWmanTaskSet function for $moduleName" {
         Mock -CommandName 'Invoke-RestMethod' -MockWith {
             $ReturnData
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         Get-ActiveWmanTaskSet -RestServer localhost -TableName tasks -WmanId 1 | Should not be $null
         Assert-MockCalled -CommandName 'Test-Connection' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-RestMethod' -Times 1 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 2 -Exactly
     }
     It "Should Throw if the Rest Server cannot be reached.." {
         Mock -CommandName 'Test-Connection' -MockWith {
             $false
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Get-ActiveWmanTaskSet -RestServer localhost -TableName tasks -WmanId 1} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 2 -Exactly
     }
     It "Should Throw if the ID is not valid." {
         Mock -CommandName 'Test-Connection' -MockWith {
@@ -36,8 +41,10 @@ Describe "Get-ActiveWmanTaskSet function for $moduleName" {
         Mock -CommandName 'Invoke-RestMethod' -MockWith { 
             Throw "(404) Not Found"
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Get-ActiveWmanTaskSet -RestServer localhost -TableName tasks -WmanId 1} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 3 -Exactly
         Assert-MockCalled -CommandName 'Invoke-RestMethod' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 4 -Exactly
     }
 }

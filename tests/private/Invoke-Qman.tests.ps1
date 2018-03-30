@@ -5,7 +5,7 @@ Describe "Invoke-Qman function for $moduleName" {
     function Get-QmanStatus{}
     function Invoke-Wait{}
     function Get-QmanTableName{}
-    function Write-Log{}
+    function Write-LogLevel{}
     It "Should Throw if the path fails" {
         Mock -CommandName 'Test-Path' -MockWith {
             $false
@@ -48,7 +48,7 @@ Describe "Invoke-Qman function for $moduleName" {
             return "tasks"
         }
         function Invoke-QmanShutdownTaskSet{}
-        Mock -CommandName 'Write-Log' -MockWith {}
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         Mock -CommandName 'Invoke-QmanShutdownTaskSet' -MockWith {}
         {Invoke-Qman -PropertyFilePath 'c:\pps\qman\pembrokeps.properties'} | Should -not -Throw
         Assert-MockCalled -CommandName 'Test-Path' -Times 2 -Exactly
@@ -56,7 +56,7 @@ Describe "Invoke-Qman function for $moduleName" {
         Assert-MockCalled -CommandName 'Get-LocalPropertySet' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Get-QmanStatus' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-QmanShutdownTaskSet' -Times 1 -Exactly
-        Assert-MockCalled -CommandName 'Write-Log' -Times 14 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 14 -Exactly
     }
     It "Should not Throw during StartUp Tasks" {
         Mock -CommandName 'Test-Path' -MockWith {
@@ -100,7 +100,7 @@ Describe "Invoke-Qman function for $moduleName" {
         Mock -CommandName 'Invoke-QmanStartupTaskSet' -MockWith {
             $true
         }
-        Mock -CommandName 'Write-Log' -MockWith {}
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-Qman -PropertyFilePath 'c:\pps\qman\pembrokeps.properties'} | Should -not -Throw
         Assert-MockCalled -CommandName 'Test-Path' -Times 3 -Exactly
         Assert-MockCalled -CommandName 'Test-Connection' -Times 2 -Exactly
@@ -108,7 +108,7 @@ Describe "Invoke-Qman function for $moduleName" {
         Assert-MockCalled -CommandName 'Get-QmanStatus' -Times 2 -Exactly
         Assert-MockCalled -CommandName 'Invoke-Wait' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-QmanStartupTaskSet' -Times 1 -Exactly
-        Assert-MockCalled -CommandName 'Write-Log' -Times 29 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 29 -Exactly
     }
     It "Should not Throw during Normal Operation" {
         Mock -CommandName 'Test-Path' -MockWith {
@@ -160,7 +160,7 @@ Describe "Invoke-Qman function for $moduleName" {
         Mock -CommandName 'Invoke-ReviewQueuedTaskSet' -MockWith {
             $true
         }
-        Mock -CommandName 'Write-Log' -MockWith {}
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-Qman -PropertyFilePath 'c:\pps\qman\pembrokeps.properties'} | Should -not -Throw
         Assert-MockCalled -CommandName 'Test-Path' -Times 4 -Exactly
         Assert-MockCalled -CommandName 'Test-Connection' -Times 3 -Exactly
@@ -170,7 +170,7 @@ Describe "Invoke-Qman function for $moduleName" {
         Assert-MockCalled -CommandName 'Invoke-AbortCancelledTaskSet' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-QueueSubmittedTaskSet' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-ReviewQueuedTaskSet' -Times 1 -Exactly
-        Assert-MockCalled -CommandName 'Write-Log' -Times 46 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 46 -Exactly
     }
     It "Should not Throw if the Status starts as Down" {
         Mock -CommandName 'Test-Path' -MockWith {
@@ -222,7 +222,7 @@ Describe "Invoke-Qman function for $moduleName" {
         Mock -CommandName 'Invoke-ReviewQueuedTaskSet' -MockWith {
             $true
         }
-        Mock -CommandName 'Write-Log' -MockWith {}
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-Qman -PropertyFilePath 'c:\pps\qman\pembrokeps.properties'} | Should -not -Throw
         Assert-MockCalled -CommandName 'Test-Path' -Times 5 -Exactly
         Assert-MockCalled -CommandName 'Test-Connection' -Times 4 -Exactly
@@ -232,7 +232,7 @@ Describe "Invoke-Qman function for $moduleName" {
         Assert-MockCalled -CommandName 'Invoke-AbortCancelledTaskSet' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-QueueSubmittedTaskSet' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-ReviewQueuedTaskSet' -Times 1 -Exactly
-        Assert-MockCalled -CommandName 'Write-Log' -Times 60 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 60 -Exactly
     }
     It "Should Throw if the Rest Server cannot be reached.." {
         Mock -CommandName 'Test-Path' -MockWith {
@@ -244,18 +244,18 @@ Describe "Invoke-Qman function for $moduleName" {
         Mock -CommandName 'Test-Connection' -MockWith {
             $false
         }
-        Mock -CommandName 'Write-Log' -MockWith {}
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-Qman -PropertyFilePath "c:\pps\qman\pembrokeps.properties"} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Path' -Times 6 -Exactly
         Assert-MockCalled -CommandName 'Test-Connection' -Times 5 -Exactly
         Assert-MockCalled -CommandName 'Get-LocalPropertySet' -Times 5 -Exactly
-        Assert-MockCalled -CommandName 'Write-Log' -Times 63 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 63 -Exactly
     }
     It "Should Throw if the file does not exist." {
         Mock -CommandName 'Test-Path' -MockWith {}
-        Mock -CommandName 'Write-Log' -MockWith {}
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-Qman -PropertyFilePath "c:\pps\qman\pembrokeps.properties"} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Path' -Times 7 -Exactly
-        Assert-MockCalled -CommandName 'Write-Log' -Times 64 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 64 -Exactly
     }
 }

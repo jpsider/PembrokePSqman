@@ -20,7 +20,10 @@ function Get-AvailableWmanSet {
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
-            $WmanStatusData = (Invoke-RestMethod -Method Get -Uri "http://$RestServer/PembrokePS/public/api/api.php/workflow_manager?filter[]=status_id,eq,2&filter[]=WORKFLOW_MANAGER_TYPE_ID,eq,$Wman_Type&transform=1" -UseBasicParsing).workflow_manager
+            Write-LogLevel -Message "Gathering available Workflow Managers with Type: $Wman_Type" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
+            $URL = "http://$RestServer/PembrokePS/public/api/api.php/workflow_manager?filter[]=status_id,eq,2&filter[]=WORKFLOW_MANAGER_TYPE_ID,eq,$Wman_Type&transform=1"
+            Write-LogLevel -Message "the URL is: $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
+            $WmanStatusData = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).workflow_manager
         }
         catch
         {
@@ -30,7 +33,7 @@ function Get-AvailableWmanSet {
         }
         $WmanStatusData
     } else {
-        Throw "Unable to reach web server."
+        Throw "Get-AvailableWmanSet: Unable to reach Rest server: $RestServer."
     }
     
 }

@@ -25,8 +25,10 @@ function Invoke-QmanStartupTaskSet {
         try
         {
             $TableName = $TableName.ToLower()
+            Write-LogLevel -Message "Aborting Cancelled tasks for Table: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             Invoke-AbortCancelledTaskSet -RestServer $RestServer -TableName $TableName
             Invoke-Wait -Seconds 5
+            Write-LogLevel -Message "Setting the QueueManager status to 2(Running)." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             Invoke-UpdateQmanData -ComponentId $ID -RestServer $RestServer -Column STATUS_ID -Value 2
         }
         catch
@@ -37,7 +39,7 @@ function Invoke-QmanStartupTaskSet {
         }
         $ReturnMessage
     } else {
-        Throw "Unable to reach web server."
+        Throw "Invoke-QmanStartupTaskSet: Unable to reach Rest server: $RestServer."
     }
 }
     

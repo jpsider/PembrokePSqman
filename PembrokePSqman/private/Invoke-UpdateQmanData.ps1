@@ -26,9 +26,11 @@ function Invoke-UpdateQmanData {
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
+            Write-LogLevel -Message "Updating the Queue_Manager -Column $Column -Value $Value" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
             if ((Invoke-UpdateComponent -ComponentId $ComponentId -RestServer $RestServer -Column $Column -Value $Value -ComponentType queue_manager) -eq 1) {
                 # Good To go
             } else {
+                Write-LogLevel -Message "Unable to update Queue Manager via restcall." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
                 Throw "Unable to update Qman data."
             }
         }
@@ -39,7 +41,7 @@ function Invoke-UpdateQmanData {
             Throw "Invoke-UpdateQmanData: $ErrorMessage $FailedItem"
         }
     } else {
-        Throw "Unable to reach web server."
+        Throw "Invoke-UpdateQmanData: Unable to reach Rest server: $RestServer."
     }
     
 }

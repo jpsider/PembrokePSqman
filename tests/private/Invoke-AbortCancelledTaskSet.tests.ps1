@@ -1,6 +1,7 @@
 $script:ModuleName = 'PembrokePSqman'
 
 Describe "Invoke-AbortCancelledTaskSet function for $moduleName" {
+    function Write-LogLevel{}
     function Invoke-UpdateTaskTable{}
     It "Should not be null" {
         $RawReturn = @{
@@ -21,17 +22,21 @@ Describe "Invoke-AbortCancelledTaskSet function for $moduleName" {
         Mock -CommandName 'Invoke-UpdateTaskTable' -MockWith {
             1
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         Invoke-AbortCancelledTaskSet -RestServer localhost -TableName tasks | Should not be $null
         Assert-MockCalled -CommandName 'Test-Connection' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-UpdateTaskTable' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Get-CancelledTaskSet' -Times 1 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 2 -Exactly
     }
     It "Should Throw if the Rest Server cannot be reached.." {
         Mock -CommandName 'Test-Connection' -MockWith {
             $false
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-AbortCancelledTaskSet -RestServer localhost -TableName tasks} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 2 -Exactly
     }
     It "Should Throw if the ID is not valid." {
         Mock -CommandName 'Test-Connection' -MockWith {
@@ -40,8 +45,10 @@ Describe "Invoke-AbortCancelledTaskSet function for $moduleName" {
         Mock -CommandName 'Get-CancelledTaskSet' -MockWith {
             Throw "(404) Not Found"
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-AbortCancelledTaskSet -RestServer localhost -TableName tasks} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 3 -Exactly
         Assert-MockCalled -CommandName 'Get-CancelledTaskSet' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 2 -Exactly
     }
 }

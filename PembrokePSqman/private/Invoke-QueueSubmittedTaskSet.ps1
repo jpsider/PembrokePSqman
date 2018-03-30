@@ -25,15 +25,18 @@ function Invoke-QueueSubmittedTaskSet {
             $TableName = $TableName.ToLower()
             $SubmittedTasks = Get-SubmittedTaskSet -RestServer $RestServer -TableName $TableName
             $SubmittedTasksCount = ($SubmittedTasks | Measure-Object).count
+            Write-LogLevel -Message "Reviewing: $SubmittedTasksCount for queueing from table: $TableName." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             if($SubmittedTasksCount -gt 0) {
                 foreach($Task in $SubmittedTasks){
                     # Foreach task, set it to Queued.
                     $TaskId = $Task.ID
                     $body = @{STATUS_ID = "6"} 
+                    Write-LogLevel -Message "Queueing task: $TaskId." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
                     $ReturnMessage = Invoke-UpdateTaskTable -RestServer $RestServer -TableName $TableName -TaskID $TaskId -Body $body
                 }
             } else {
                 # No tasks to queue
+                Write-LogLevel -Message "No Tasks to Queue from table: $TableName." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
             }
         }
         catch
@@ -44,7 +47,7 @@ function Invoke-QueueSubmittedTaskSet {
         }
         $ReturnMessage
     } else {
-        Throw "Unable to reach web server."
+        Throw "Invoke-QueueSubmittedTaskSet: Unable to reach Rest server: $RestServer."
     }
     
 }

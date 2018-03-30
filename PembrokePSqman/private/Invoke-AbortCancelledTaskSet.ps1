@@ -25,6 +25,7 @@ function Invoke-AbortCancelledTaskSet {
             $TableName = $TableName.ToLower()
             $CancelledTasks = Get-CancelledTaskSet -RestServer $RestServer -TableName $TableName
             $CancelledTasksCount = ($CancelledTasks | Measure-Object).count
+            Write-LogLevel -Message "Aborting: $CancelledTasksCount, in table: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel info
             if($CancelledTasksCount -gt 0) {
                 foreach($Task in $CancelledTasks){
                     # Foreach task, set it to Complete/Aborted.
@@ -32,6 +33,7 @@ function Invoke-AbortCancelledTaskSet {
                     $body = @{STATUS_ID = "8"
                                 RESULT_ID = "5"
                             }
+                    Write-LogLevel -Message "Aborting task: $TaskId, table: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
                     $RestReturn = Invoke-UpdateTaskTable -RestServer $RestServer -TableName $TableName -TaskID $TaskId -Body $body
                 }
             } else {
@@ -46,7 +48,7 @@ function Invoke-AbortCancelledTaskSet {
         }
         $RestReturn
     } else {
-        Throw "Unable to reach web server."
+        Throw "Invoke-AbortCancelledTaskSet: Unable to reach Rest server: $RestServer."
     }
     
 }

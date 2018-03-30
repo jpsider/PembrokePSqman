@@ -24,8 +24,10 @@ function Get-ActiveWmanTaskSet {
         try
         {
             # Checking for tasks that are (Assigned(7),Running(8),Cancelled(10),Staged(14))
+            Write-LogLevel -Message "Checking for tasks that are (Assigned(7),Running(8),Cancelled(10),Staged(14)) in table: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
             $TableName = $TableName.ToLower()
             $URL = "http://$RestServer/PembrokePS/public/api/api.php/$TableName" + "?&filter[]=STATUS_ID,eq,7&filter[]=STATUS_ID,eq,8&filter[]=STATUS_ID,eq,10&filter[]=STATUS_ID,eq,14&transform=1&satisfy=any"
+            Write-LogLevel -Message "The Url is $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
             $ActiveWmanTasks = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).$TableName | Where-Object {$_.WORKFLOW_MANAGER_ID -eq "$WmanId"}
         }
         catch
@@ -36,7 +38,7 @@ function Get-ActiveWmanTaskSet {
         }
         $ActiveWmanTasks
     } else {
-        Throw "Unable to reach web server."
+        Throw "Get-ActiveWmanTaskSet: Unable to reach Rest server $RestServer."
     }
     
 }

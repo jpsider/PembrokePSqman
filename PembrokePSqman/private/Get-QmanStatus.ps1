@@ -20,6 +20,7 @@ function Get-QmanStatus {
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
+            Write-LogLevel -Message "Getting the Queue_Manager via 'Get-ComponentStatus" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
             $ComponentStatusData = Get-ComponentStatus -ComponentType Queue_Manager -ComponentId $ComponentId -RestServer $RestServer
         }
         catch
@@ -30,7 +31,7 @@ function Get-QmanStatus {
         }
         $ComponentStatusData
     } else {
-        Throw "Unable to reach web server."
+        Throw "Get-QmanStatus: Unable to reach Rest server: $RestServer."
     }
     
 }

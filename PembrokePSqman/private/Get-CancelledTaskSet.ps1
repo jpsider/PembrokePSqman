@@ -21,7 +21,9 @@ function Get-CancelledTaskSet {
         try
         {
             $TableName = $TableName.ToLower()
+            Write-LogLevel -Message "Gathering cancelled tasks from table: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             $URL = "http://$RestServer/PembrokePS/public/api/api.php/$TableName" + "?filter=STATUS_ID,eq,10&transform=1"
+            Write-LogLevel -Message "the URL is: $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
             $CancelledTasks = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).$TableName
         }
         catch
@@ -32,7 +34,7 @@ function Get-CancelledTaskSet {
         }
         $CancelledTasks
     } else {
-        Throw "Unable to reach web server."
+        Throw "Get-CancelledTaskSet: Unable to reach Rest server: $RestServer."
     }
     
 }

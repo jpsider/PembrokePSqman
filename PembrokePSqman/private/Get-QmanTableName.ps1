@@ -20,7 +20,10 @@ function Get-QmanTableName {
     if (Test-Connection -Count 1 $RestServer -Quiet) {
         try
         {
-            $TableName = (Invoke-RestMethod -Method Get -Uri "http://$RestServer/PembrokePS/public/api/api.php/queue_manager_type/$Type_ID" -UseBasicParsing).TABLENAME
+            Write-LogLevel -Message "Getting the TableName from: queue_Manager_type table." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
+            $URL = "http://$RestServer/PembrokePS/public/api/api.php/queue_manager_type/$Type_ID"
+            Write-LogLevel -Message "the URL is: $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
+            $TableName = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).TABLENAME
         }
         catch
         {
@@ -30,7 +33,7 @@ function Get-QmanTableName {
         }
         $TableName
     } else {
-        Throw "Unable to reach web server."
+        Throw "Get-QmanTableName: Unable to reach Rest server: $RestServer."
     }
     
 }

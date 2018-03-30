@@ -1,6 +1,7 @@
 $script:ModuleName = 'PembrokePSqman'
 
 Describe "Invoke-ReviewQueuedTaskSet function for $moduleName" {
+    function Write-LogLevel{}
     $RawReturn1 = @(
         @{
             'ID'           = '1'
@@ -57,6 +58,7 @@ Describe "Invoke-ReviewQueuedTaskSet function for $moduleName" {
         Mock -CommandName 'Invoke-AssignTask' -MockWith {
             1
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         Invoke-ReviewQueuedTaskSet -RestServer localhost -TableName tasks | Should not be $null
         Assert-MockCalled -CommandName 'Test-Connection' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Get-QueuedTaskSet' -Times 1 -Exactly
@@ -64,13 +66,16 @@ Describe "Invoke-ReviewQueuedTaskSet function for $moduleName" {
         Assert-MockCalled -CommandName 'Get-AvailableWmanSet' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Get-ActiveWmanTaskSet' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-AssignTask' -Times 1 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 5 -Exactly
     }
     It "Should Throw if the Rest Server cannot be reached.." {
         Mock -CommandName 'Test-Connection' -MockWith {
             $false
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-ReviewQueuedTaskSet -RestServer localhost -TableName tasks} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 5 -Exactly
     }
     It "Should Throw if the ID is not valid." {
         Mock -CommandName 'Test-Connection' -MockWith {
@@ -79,8 +84,66 @@ Describe "Invoke-ReviewQueuedTaskSet function for $moduleName" {
         Mock -CommandName 'Get-QueuedTaskSet' -MockWith { 
             Throw "(404) Not Found"
         }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
         {Invoke-ReviewQueuedTaskSet -RestServer localhost -TableName tasks} | Should -Throw
         Assert-MockCalled -CommandName 'Test-Connection' -Times 3 -Exactly
         Assert-MockCalled -CommandName 'Get-QueuedTaskSet' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 5 -Exactly
+    }
+    It "Should not Throw if there are no Queued Tasks." {
+        Mock -CommandName 'Test-Connection' -MockWith {
+            $true
+        }
+        Mock -CommandName 'Get-QueuedTaskSet' -MockWith { 
+            $Data = $null
+            return $Data
+        }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
+        {Invoke-ReviewQueuedTaskSet -RestServer localhost -TableName tasks} | Should -not -Throw
+        Assert-MockCalled -CommandName 'Test-Connection' -Times 4 -Exactly
+        Assert-MockCalled -CommandName 'Get-QueuedTaskSet' -Times 3 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 7 -Exactly
+    }
+    It "Should not throw if there are no available Workflow Managers" {
+        Mock -CommandName 'Test-Connection' -MockWith {
+            $true
+        }
+        Mock -CommandName 'Get-QueuedTaskSet' -MockWith {
+            $ReturnData1
+        }
+        Mock -CommandName 'Get-AvailableWmanType' -MockWith {
+            $ReturnData2
+        }
+        Mock -CommandName 'Get-AvailableWmanSet' -MockWith {
+            $ReturnData3
+        }
+        Mock -CommandName 'Get-ActiveWmanTaskSet' -MockWith {
+            $RawReturn5 = @(
+                @{
+                    ID            = '1'
+                }
+                @{
+                    ID            = '2'
+                }
+                @{
+                    ID            = '3'
+                }
+            )
+            $ReturnJson5 = $RawReturn5 | ConvertTo-Json
+            $ReturnData5 = $ReturnJson5 | convertfrom-json
+            $ReturnData5
+        }
+        Mock -CommandName 'Invoke-AssignTask' -MockWith {
+            1
+        }
+        Mock -CommandName 'Write-LogLevel' -MockWith {}
+        {Invoke-ReviewQueuedTaskSet -RestServer localhost -TableName tasks} | Should -not -Throw
+        Assert-MockCalled -CommandName 'Test-Connection' -Times 5 -Exactly
+        Assert-MockCalled -CommandName 'Get-QueuedTaskSet' -Times 4 -Exactly
+        Assert-MockCalled -CommandName 'Get-AvailableWmanType' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Get-AvailableWmanSet' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Get-ActiveWmanTaskSet' -Times 2 -Exactly
+        Assert-MockCalled -CommandName 'Invoke-AssignTask' -Times 1 -Exactly
+        Assert-MockCalled -CommandName 'Write-LogLevel' -Times 12 -Exactly
     }
 }

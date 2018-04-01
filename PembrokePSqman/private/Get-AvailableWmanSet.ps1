@@ -23,7 +23,7 @@ function Get-AvailableWmanSet {
             Write-LogLevel -Message "Gathering available Workflow Managers with Type: $Wman_Type" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             $URL = "http://$RestServer/PembrokePS/public/api/api.php/workflow_manager?filter[]=status_id,eq,2&filter[]=WORKFLOW_MANAGER_TYPE_ID,eq,$Wman_Type&transform=1"
             Write-LogLevel -Message "the URL is: $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
-            $WmanStatusData = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).workflow_manager
+            $WmanStatusData = Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing
         }
         catch
         {

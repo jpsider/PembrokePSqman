@@ -24,7 +24,7 @@ function Get-QueuedTaskSet {
             Write-LogLevel -Message "Gathering Queued tasks from table: $TableName." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             $URL = "http://$RestServer/PembrokePS/public/api/api.php/$TableName" + "?filter=STATUS_ID,eq,6&transform=1"
             Write-LogLevel -Message "the URL is: $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
-            $SubmittedTasks = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).$TableName
+            $SubmittedTasks = Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing
         }
         catch
         {

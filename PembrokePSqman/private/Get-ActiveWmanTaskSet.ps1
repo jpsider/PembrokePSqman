@@ -28,7 +28,7 @@ function Get-ActiveWmanTaskSet {
             $TableName = $TableName.ToLower()
             $URL = "http://$RestServer/PembrokePS/public/api/api.php/$TableName" + "?&filter[]=STATUS_ID,eq,7&filter[]=STATUS_ID,eq,8&filter[]=STATUS_ID,eq,10&filter[]=STATUS_ID,eq,14&transform=1&satisfy=any"
             Write-LogLevel -Message "The Url is $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
-            $ActiveWmanTasks = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).$TableName | Where-Object {$_.WORKFLOW_MANAGER_ID -eq "$WmanId"}
+            $ActiveWmanTasks = Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing
         }
         catch
         {

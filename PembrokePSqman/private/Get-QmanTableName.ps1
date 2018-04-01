@@ -23,7 +23,7 @@ function Get-QmanTableName {
             Write-LogLevel -Message "Getting the TableName from: queue_Manager_type table." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
             $URL = "http://$RestServer/PembrokePS/public/api/api.php/queue_manager_type/$Type_ID"
             Write-LogLevel -Message "the URL is: $URL" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel TRACE
-            $TableName = (Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing).TABLENAME
+            $TableName = Invoke-RestMethod -Method Get -Uri "$URL" -UseBasicParsing
         }
         catch
         {

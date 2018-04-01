@@ -5,7 +5,7 @@ function Invoke-Qman {
     .PARAMETER PropertyFilePath
         A properties path is Required.
 	.EXAMPLE
-        Invoke-Qman -PropertyFilePath "c:\pps\qman\pembrokeps.properties"
+        Invoke-Qman -PropertyFilePath "c:\PembrokePS\qman\pembrokeps.properties"
 	.NOTES
         This will return a hashtable of data from the PPS database.
     #>
@@ -17,13 +17,13 @@ function Invoke-Qman {
     )
     if (Test-Path -Path $PropertyFilePath) {
         # Gather Local Properties for the Queue Manager
-        Write-LogLevel -Message "Gathering Local Properties from: $PropertyFilePath" -RunLogLevel CONSOLEONLY -MsgLevel CONSOLEONLY
+        Write-LogLevel -Message "Gathering Local Properties from: $PropertyFilePath" -Logfile "$LOG_FILE" -RunLogLevel CONSOLEONLY -MsgLevel CONSOLEONLY
         $PpsProperties = Get-LocalPropertySet -PropertyFilePath $PropertyFilePath
         $RestServer = $PpsProperties.'system.RestServer'
         $ID = $PpsProperties.'component.Id'
         $RunLogLevel = $PpsProperties.'component.RunLogLevel'
      } else {
-        Write-LogLevel -Message "Unable to Locate Local properties file: $PropertyFilePath." -RunLogLevel $RunLogLevel -MsgLevel ERROR
+        Write-LogLevel -Message "Unable to Locate Local properties file: $PropertyFilePath." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel ERROR
         Throw "Invoke-Qman: Unable to Locate Properties file."
     }
     try
@@ -31,15 +31,15 @@ function Invoke-Qman {
         $script:QmanRunning = "Running"
         do {
             # Test connection with the Database Server
-            Write-LogLevel -Message "Starting Invoke-Qman loop" -RunLogLevel $RunLogLevel -MsgLevel INFO
+            Write-LogLevel -Message "Starting Invoke-Qman loop" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             if (Test-Connection -Count 1 $RestServer -Quiet) {
                 # No Action needed if the RestServer can be reached.
             } else {
                 $script:QmanRunning = "Shutdown"
-                Write-LogLevel -Message "Unable to reach RestServer: $RestServer." -RunLogLevel $RunLogLevel -MsgLevel ERROR
+                Write-LogLevel -Message "Unable to reach RestServer: $RestServer." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel ERROR
                 Throw "Unable to reach Rest server."
             }
-			Write-LogLevel -Message "Validated Connection to RestServer." -RunLogLevel $RunLogLevel -MsgLevel INFO 
+			Write-LogLevel -Message "Validated Connection to RestServer." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO 
             # Get the Status and Queue Manager Specific Information from the Database
             $QmanStatusData = Get-QmanStatus -ComponentId $ID -RestServer $RestServer
             $QueueManagerStatus = $QmanStatusData.STATUS_ID
@@ -47,8 +47,8 @@ function Invoke-Qman {
             $ManagerWait = $QmanStatusData.WAIT
             $QUEUE_MANAGER_TYPE_ID = $QmanStatusData.QUEUE_MANAGER_TYPE_ID
 			Write-LogLevel -Message "Get-QmanStatus is complete" -Logfile $LOG_FILE -RunLogLevel $RunLogLevel -MsgLevel INFO 
-            $TableName = Get-QmanTableName -RestServer $RestServer -Type_ID $QUEUE_MANAGER_TYPE_ID
-			Write-LogLevel -Message "Get QmanTablename is complete, TableName: $TableName" -RunLogLevel $RunLogLevel -MsgLevel INFO
+            $TableName = (Get-QmanTableName -RestServer $RestServer -Type_ID $QUEUE_MANAGER_TYPE_ID).TABLENAME
+			Write-LogLevel -Message "Get QmanTablename is complete, TableName: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             # Based on the Status Perform Specific actions
             Write-LogLevel -Message "QueueManager ID:         $ID" -Logfile $LOG_FILE -RunLogLevel $RunLogLevel -MsgLevel INFO 
             Write-LogLevel -Message "QueueManager Status:     $QueueManagerStatus" -Logfile $LOG_FILE -RunLogLevel $RunLogLevel -MsgLevel INFO 

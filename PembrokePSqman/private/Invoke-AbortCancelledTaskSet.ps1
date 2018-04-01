@@ -23,15 +23,16 @@ function Invoke-AbortCancelledTaskSet {
         {
             # Get a list of Submitted tasks
             $TableName = $TableName.ToLower()
-            $CancelledTasks = Get-CancelledTaskSet -RestServer $RestServer -TableName $TableName
+            $CancelledTasks = (Get-CancelledTaskSet -RestServer $RestServer -TableName $TableName).$TableName
             $CancelledTasksCount = ($CancelledTasks | Measure-Object).count
             Write-LogLevel -Message "Aborting: $CancelledTasksCount, in table: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel info
             if($CancelledTasksCount -gt 0) {
                 foreach($Task in $CancelledTasks){
                     # Foreach task, set it to Complete/Aborted.
                     $TaskId = $Task.ID
-                    $body = @{STATUS_ID = "8"
+                    $body = @{STATUS_ID = "9"
                                 RESULT_ID = "5"
+                                WORKFLOW_MANAGER_ID = "9999"
                             }
                     Write-LogLevel -Message "Aborting task: $TaskId, table: $TableName" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
                     $RestReturn = Invoke-UpdateTaskTable -RestServer $RestServer -TableName $TableName -TaskID $TaskId -Body $body

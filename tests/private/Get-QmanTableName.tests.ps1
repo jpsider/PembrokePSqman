@@ -15,7 +15,7 @@ Describe "Get-QmanTableName function for $moduleName" {
             $ReturnData
         }
         Mock -CommandName 'Write-LogLevel' -MockWith {}
-        Get-QmanTableName -RestServer localhost -Type_ID 1 | Should be "tasks"
+        Get-QmanTableName -RestServer localhost -Type_ID 1 | Should be "@{TABLENAME=tasks}"
         Assert-MockCalled -CommandName 'Test-Connection' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Invoke-RestMethod' -Times 1 -Exactly
         Assert-MockCalled -CommandName 'Write-LogLevel' -Times 2 -Exactly

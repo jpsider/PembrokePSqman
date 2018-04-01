@@ -23,7 +23,7 @@ function Invoke-QueueSubmittedTaskSet {
         {
             # Get a list of Submitted tasks
             $TableName = $TableName.ToLower()
-            $SubmittedTasks = Get-SubmittedTaskSet -RestServer $RestServer -TableName $TableName
+            $SubmittedTasks = (Get-SubmittedTaskSet -RestServer $RestServer -TableName $TableName).$TableName
             $SubmittedTasksCount = ($SubmittedTasks | Measure-Object).count
             Write-LogLevel -Message "Reviewing: $SubmittedTasksCount for queueing from table: $TableName." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             if($SubmittedTasksCount -gt 0) {

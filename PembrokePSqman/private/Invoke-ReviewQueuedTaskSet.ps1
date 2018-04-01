@@ -23,7 +23,7 @@ function Invoke-ReviewQueuedTaskSet {
         {
             # Get a list of Submitted tasks
             $TableName = $TableName.ToLower()
-            $QueuedTasks = Get-QueuedTaskSet -RestServer $RestServer -TableName $TableName
+            $QueuedTasks = (Get-QueuedTaskSet -RestServer $RestServer -TableName $TableName).$TableName
             $QueuedTasksCount = ($QueuedTasks | Measure-Object).Count
             Write-LogLevel -Message "Reviewing: $QueuedTasksCount tasks that are queued from table: $TableName." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
             if($QueuedTasksCount -gt 0) {
@@ -34,10 +34,10 @@ function Invoke-ReviewQueuedTaskSet {
                     Write-LogLevel -Message "Reviewing TaskId: $TaskId TaskTypeID: $Task_Type_Id for Assignment." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
                     # Based on the task type ID, we need to get the Workflow Manager Type that is enabled to perform that task.
                     Write-LogLevel -Message "Determining the Workflow Manager Type that can perform the task." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
-                    $Wman_Type_ID = (Get-AvailableWmanType -RestServer localhost -TaskTypeId $TASK_TYPE_ID).WORKFLOW_MANAGER_TYPE_ID
+                    $Wman_Type_ID = ((Get-AvailableWmanType -RestServer localhost -TaskTypeId $TASK_TYPE_ID).wman_task_types).WORKFLOW_MANAGER_TYPE_ID
                     # then get the WMAN that is available
                     Write-LogLevel -Message "Getting list of Available Workflow Managers" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
-                    $AvailableWmanSet = Get-AvailableWmanSet -RestServer localhost -Wman_Type $Wman_Type_ID
+                    $AvailableWmanSet = (Get-AvailableWmanSet -RestServer localhost -Wman_Type $Wman_Type_ID).workflow_manager
                     # Loop through each to see if the Wman is at it's max
                     :SingleTaskLoop
                     foreach($Workflow_Manager in $AvailableWmanSet) {
@@ -45,10 +45,10 @@ function Invoke-ReviewQueuedTaskSet {
                         $Wman_Max = $Workflow_Manager.MAX_CONCURRENT_TASKS
                         $Wman_Hostname = $Workflow_Manager.Hostname
                         # Get the current Number of 'active' tasks assigned to the Workflow Manager
-                        $WmanActiveTaskCount = (Get-ActiveWmanTaskSet -RestServer localhost -TableName tasks -WmanId $WmanId | Measure-Object).count
+                        $WmanActiveTaskCount = ((Get-ActiveWmanTaskSet -RestServer localhost -TableName tasks -WmanId $WmanId).$TableName | Where-Object {$_.WORKFLOW_MANAGER_ID -eq "$WmanId"} | Measure-Object).count
                         # if its not, then we can assign it!
                         if ($WmanActiveTaskCount -lt $Wman_Max){
-                        #Don't forget to break out if we can assign it!
+                            #Don't forget to break out if we can assign it!
                             Write-LogLevel -Message "Assigning task: $TaskId to Mgr: $Wman_Hostname." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
                             $ReturnMessage = Invoke-AssignTask -RestServer localhost -TaskId $TaskId -WmanId $WmanId
                             break SingleTaskLoop

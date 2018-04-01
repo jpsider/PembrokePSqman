@@ -2,41 +2,41 @@ $script:ModuleName = 'PembrokePSqman'
 
 Describe "Invoke-ReviewQueuedTaskSet function for $moduleName" {
     function Write-LogLevel{}
-    $RawReturn1 = @(
-        @{
-            'ID'           = '1'
-            'STATUS_ID'     = '6'
-            'TASK_TYPE_ID'  = '1'
-        }               
-    )
+    $RawReturn1 = @{
+        tasks = @{
+            ID            = '1'
+            STATUS_ID     = '1'
+            TASK_TYPE_ID  = '1'
+        }                   
+    }
     $ReturnJson1 = $RawReturn1 | ConvertTo-Json
     $ReturnData1 = $ReturnJson1 | convertfrom-json
-    $RawReturn2 = @(
-        @{
+    $RawReturn2 = @{
+        wman_task_types = @{
             ID                        = '1'
             WORKFLOW_MANAGER_TYPE_ID  = '1'
             TASK_TYPE_ID              = '1'
         }               
-    )
+    }
     $ReturnJson2 = $RawReturn2 | ConvertTo-Json
     $ReturnData2 = $ReturnJson2 | convertfrom-json
-    $RawReturn3 = @(
-        @{
+    $RawReturn3 = @{
+        workflow_manager = @{
             ID                     = '1'
             STATUS_ID              = '1'
             MAX_CONCURRENT_TASKS   = '2'
             Hostname               = 'localhost'
         }               
-    )
+    }
     $ReturnJson3 = $RawReturn3 | ConvertTo-Json
     $ReturnData3 = $ReturnJson3 | convertfrom-json
-    $RawReturn4 = @(
-        @{
+    $RawReturn4 = @{
+        tasks = @{
             ID            = '1'
             STATUS_ID     = '9'
             RESULT_ID     = '2'
         }               
-    )
+    }
     $ReturnJson4 = $RawReturn4 | ConvertTo-Json
     $ReturnData4 = $ReturnJson4 | convertfrom-json
     It "Should not be null" {
@@ -118,17 +118,20 @@ Describe "Invoke-ReviewQueuedTaskSet function for $moduleName" {
             $ReturnData3
         }
         Mock -CommandName 'Get-ActiveWmanTaskSet' -MockWith {
-            $RawReturn5 = @(
-                @{
+            $RawReturn5 = @{
+                tasks = @{
                     ID            = '1'
-                }
+                    WORKFLOW_MANAGER_ID = '1'
+                },
                 @{
                     ID            = '2'
-                }
+                    WORKFLOW_MANAGER_ID = '1'
+                },
                 @{
                     ID            = '3'
+                    WORKFLOW_MANAGER_ID = '1'
                 }
-            )
+            }
             $ReturnJson5 = $RawReturn5 | ConvertTo-Json
             $ReturnData5 = $ReturnJson5 | convertfrom-json
             $ReturnData5

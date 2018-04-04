@@ -21,9 +21,12 @@ Describe "Invoke-Qman function for $moduleName" {
             $PpsProperties = @{
                 system = @{
                     RestServer = 'localhost'
+                    root = 'c:\\PembrokePS'
                 }
                 component = @{
                     id = '1'
+                    RunLogLevel = 'DEBUG'
+                    Logfile = 'c:\\PembrokePS\\Logs\\qman\\qman_1.log'
                 }
             }
             return $PpsProperties
@@ -66,9 +69,12 @@ Describe "Invoke-Qman function for $moduleName" {
             $PpsProperties = @{
                 system = @{
                     RestServer = 'localhost'
+                    root = 'c:\\PembrokePS'
                 }
                 component = @{
                     id = '1'
+                    RunLogLevel = 'DEBUG'
+                    Logfile = 'c:\\PembrokePS\\Logs\\qman\\qman_1.log'
                 }
             }
             return $PpsProperties
@@ -118,9 +124,12 @@ Describe "Invoke-Qman function for $moduleName" {
             $PpsProperties = @{
                 system = @{
                     RestServer = 'localhost'
+                    root = 'c:\\PembrokePS'
                 }
                 component = @{
                     id = '1'
+                    RunLogLevel = 'DEBUG'
+                    Logfile = 'c:\\PembrokePS\\Logs\\qman\\qman_1.log'
                 }
             }
             return $PpsProperties
@@ -180,9 +189,12 @@ Describe "Invoke-Qman function for $moduleName" {
             $PpsProperties = @{
                 system = @{
                     RestServer = 'localhost'
+                    root = 'c:\\PembrokePS'
                 }
                 component = @{
                     id = '1'
+                    RunLogLevel = 'DEBUG'
+                    Logfile = 'c:\\PembrokePS\\Logs\\qman\\qman_1.log'
                 }
             }
             return $PpsProperties

@@ -21,7 +21,7 @@ function Get-QmanStatus {
         try
         {
             Write-LogLevel -Message "Getting the Queue_Manager via 'Get-ComponentStatus" -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel DEBUG
-            $ComponentStatusData = Get-ComponentStatus -ComponentType Queue_Manager -ComponentId $ComponentId -RestServer $RestServer
+            $ComponentStatusData = (Get-ComponentStatus -ComponentType Queue_Manager -ComponentId $ComponentId -RestServer $RestServer).queue_manager
         }
         catch
         {

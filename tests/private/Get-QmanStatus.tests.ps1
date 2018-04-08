@@ -5,7 +5,7 @@ Describe "Get-QmanStatus function for $moduleName" {
     function Get-ComponentStatus {}
     It "Should not be null" {
         $RawReturn = @{
-            value = @{
+            queue_manager = @{
                 ID            = '1'
                 STATUS_ID     = '1'
                 WAIT       = '300'

@@ -1,5 +1,9 @@
 $script:ModuleName = 'PembrokePSqman'
 
+$here = (Split-Path -Parent $MyInvocation.MyCommand.Path) -replace 'tests', "$script:ModuleName"
+$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
+. "$here\$sut"
+
 Describe "Get-QueuedTaskSet function for $moduleName" {
     function Write-LogLevel{}
     It "Should not be null" {

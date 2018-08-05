@@ -10,6 +10,7 @@ Describe "Invoke-ReviewQueuedTaskSet function for $moduleName" {
 	function Get-AvailableWmanType {}
 	function Get-AvailableWmanSet {}
 	function Get-ActiveWmanTaskSet {}
+	function Invoke-AssignTask {}
     $RawReturn1 = @{
         tasks = @{
             ID            = '1'

@@ -8,6 +8,7 @@ Describe "Invoke-QmanShutdownTaskSet function for $moduleName" {
     function Write-LogLevel{}
     function Invoke-Wait{}
 	function Invoke-AbortCancelledTaskSet {}
+	function Invoke-UpdateQmanData {}
     It "Should not be null" {
         Mock -CommandName 'Test-Connection' -MockWith {
             $true

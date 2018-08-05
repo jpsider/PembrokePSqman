@@ -6,6 +6,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 
 Describe "Invoke-ReviewQueuedTaskSet function for $moduleName" {
     function Write-LogLevel{}
+	function Get-QueuedTaskSet {}
     $RawReturn1 = @{
         tasks = @{
             ID            = '1'

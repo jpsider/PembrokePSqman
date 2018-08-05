@@ -7,6 +7,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 Describe "Invoke-QueueSubmittedTaskSet function for $moduleName" {
     function Write-LogLevel{}
     function Invoke-UpdateTaskTable{}
+	function Get-SubmittedTaskSet {}
     It "Should not be null" {
         $RawReturn = @{
             tasks = @{

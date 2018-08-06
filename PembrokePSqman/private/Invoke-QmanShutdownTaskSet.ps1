@@ -34,13 +34,11 @@ function Invoke-QmanShutdownTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Invoke-QmanShutdownTaskSet: $ErrorMessage $FailedItem"
         }
         $ReturnMessage
     } else {
         Throw "Invoke-QmanShutdownTaskSet: Unable to reach Rest server: $RestServer."
     }
-
 }
-    

@@ -28,12 +28,11 @@ function Get-AvailableWmanSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Get-AvailableWmanSet: $ErrorMessage $FailedItem"
         }
         $WmanStatusData
     } else {
         Throw "Get-AvailableWmanSet: Unable to reach Rest server: $RestServer."
     }
-    
 }

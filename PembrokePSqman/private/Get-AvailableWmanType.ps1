@@ -28,12 +28,11 @@ function Get-AvailableWmanType {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Get-AvailableWmanType: $ErrorMessage $FailedItem"
         }
         $WmanTypeData
     } else {
         Throw "Get-AvailableWmanType: Unable to reach Rest server: $RestServer."
     }
-    
 }

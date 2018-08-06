@@ -44,12 +44,11 @@ function Invoke-AbortCancelledTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Invoke-AbortCancelledTaskSet: $ErrorMessage $FailedItem"
         }
         $RestReturn
     } else {
         Throw "Invoke-AbortCancelledTaskSet: Unable to reach Rest server: $RestServer."
     }
-    
 }

@@ -29,12 +29,11 @@ function Get-SubmittedTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Get-SubmittedTaskSet: $ErrorMessage $FailedItem"
         }
         $SubmittedTasks
     } else {
         Throw "Get-SubmittedTaskSet: Unable to reach Rest server: $RestServer."
     }
-    
 }

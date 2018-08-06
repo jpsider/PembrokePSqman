@@ -42,7 +42,7 @@ function Start-Qman {
             catch
             {
                 $ErrorMessage = $_.Exception.Message
-                $FailedItem = $_.Exception.ItemName		
+                $FailedItem = $_.Exception.ItemName
                 Throw "Start-Qman: $ErrorMessage $FailedItem"
             }
         }
@@ -52,5 +52,4 @@ function Start-Qman {
             return $false
         }
     }
-    
 }

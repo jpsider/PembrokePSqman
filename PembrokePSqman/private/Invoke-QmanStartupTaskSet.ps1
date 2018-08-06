@@ -34,7 +34,7 @@ function Invoke-QmanStartupTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Invoke-QmanStartupTaskSet: $ErrorMessage $FailedItem"
         }
         $ReturnMessage
@@ -42,4 +42,3 @@ function Invoke-QmanStartupTaskSet {
         Throw "Invoke-QmanStartupTaskSet: Unable to reach Rest server: $RestServer."
     }
 }
-    

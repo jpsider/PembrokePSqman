@@ -66,12 +66,11 @@ function Invoke-ReviewQueuedTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Invoke-ReviewQueuedTaskSet: $ErrorMessage $FailedItem"
         }
         $ReturnMessage
     } else {
         Throw "Invoke-ReviewQueuedTaskSet: Unable to reach Rest server: $RestServer."
     }
-    
 }

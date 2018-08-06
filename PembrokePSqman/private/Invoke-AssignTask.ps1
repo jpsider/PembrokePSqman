@@ -38,12 +38,11 @@ function Invoke-AssignTask {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Invoke-AssignTask: $ErrorMessage $FailedItem"
         }
         $RestReturn
     } else {
         Throw "Invoke-AssignTask: Unable to reach Rest server: $RestServer."
     }
-    
 }

@@ -30,7 +30,7 @@ function Invoke-QueueSubmittedTaskSet {
                 foreach($Task in $SubmittedTasks){
                     # Foreach task, set it to Queued.
                     $TaskId = $Task.ID
-                    $body = @{STATUS_ID = "6"} 
+                    $body = @{STATUS_ID = "6"}
                     Write-LogLevel -Message "Queueing task: $TaskId." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel INFO
                     $ReturnMessage = Invoke-UpdateTaskTable -RestServer $RestServer -TableName $TableName -TaskID $TaskId -Body $body
                 }
@@ -42,12 +42,11 @@ function Invoke-QueueSubmittedTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Invoke-QueueSubmittedTaskSet: $ErrorMessage $FailedItem"
         }
         $ReturnMessage
     } else {
         Throw "Invoke-QueueSubmittedTaskSet: Unable to reach Rest server: $RestServer."
     }
-    
 }

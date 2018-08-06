@@ -26,12 +26,11 @@ function Get-QmanStatus {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Get-QmanStatus: $ErrorMessage $FailedItem"
         }
         $ComponentStatusData
     } else {
         Throw "Get-QmanStatus: Unable to reach Rest server: $RestServer."
     }
-    
 }

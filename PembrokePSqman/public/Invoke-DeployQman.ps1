@@ -33,13 +33,12 @@ function Invoke-DeployQman
         Write-LogLevel -Message "Creating Rest Directory Set." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel CONSOLEONLY
         Invoke-CreateRouteDirectorySet -InstallDirectory "$Destination\Qman\rest"
         Write-LogLevel -Message "Copying Default Properties file to Qman\data Directory." -Logfile "$LOG_FILE" -RunLogLevel $RunLogLevel -MsgLevel CONSOLEONLY
-        Copy-Item -Path "$Source\data\pembrokeps.properties" -Destination "$Destination\qman\data" -Confirm:$false       
+        Copy-Item -Path "$Source\data\pembrokeps.properties" -Destination "$Destination\qman\data" -Confirm:$false
     }
     catch
     {
         $ErrorMessage = $_.Exception.Message
-        $FailedItem = $_.Exception.ItemName		
+        $FailedItem = $_.Exception.ItemName
         Throw "Invoke-DeployQman: $ErrorMessage $FailedItem"
     }
-
 }

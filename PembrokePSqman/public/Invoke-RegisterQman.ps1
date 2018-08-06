@@ -5,7 +5,7 @@ function Invoke-RegisterQman {
     .PARAMETER RestServer
         A Rest Server is required.
 	.EXAMPLE
-        Invoke-RegisterQman -RestServer -localhost 
+        Invoke-RegisterQman -RestServer -localhost
 	.NOTES
         This will return a hashtable of data from the PPS database.
     #>
@@ -42,12 +42,11 @@ function Invoke-RegisterQman {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Invoke-RegisterQman: $ErrorMessage $FailedItem"
         }
         #$QmanStatusData
     } else {
         Throw "Unable to reach Rest server: $RestServer."
     }
-    
 }

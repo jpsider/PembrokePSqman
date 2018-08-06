@@ -29,12 +29,11 @@ function Get-QueuedTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Get-QueuedTaskSet: $ErrorMessage $FailedItem"
         }
         $SubmittedTasks
     } else {
         Throw "Get-QueuedTaskSet: Unable to reach Rest server: $RestServer."
     }
-    
 }

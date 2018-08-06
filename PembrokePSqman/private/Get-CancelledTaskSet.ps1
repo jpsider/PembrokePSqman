@@ -29,12 +29,11 @@ function Get-CancelledTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Get-CancelledTaskSet: $ErrorMessage $FailedItem"
         }
         $CancelledTasks
     } else {
         Throw "Get-CancelledTaskSet: Unable to reach Rest server: $RestServer."
     }
-    
 }

@@ -33,12 +33,11 @@ function Get-ActiveWmanTaskSet {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Get-ActiveWmanTaskSet: $ErrorMessage $FailedItem"
         }
         $ActiveWmanTasks
     } else {
         Throw "Get-ActiveWmanTaskSet: Unable to reach Rest server $RestServer."
     }
-    
 }

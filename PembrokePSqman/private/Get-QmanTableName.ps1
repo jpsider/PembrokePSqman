@@ -28,12 +28,11 @@ function Get-QmanTableName {
         catch
         {
             $ErrorMessage = $_.Exception.Message
-            $FailedItem = $_.Exception.ItemName		
+            $FailedItem = $_.Exception.ItemName
             Throw "Get-QmanTableName: $ErrorMessage $FailedItem"
         }
         $TableName
     } else {
         Throw "Get-QmanTableName: Unable to reach Rest server: $RestServer."
     }
-    
 }

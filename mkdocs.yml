@@ -1,11 +1,13 @@
 site_name: PembrokePSqman
 repo_url: https://github.com/jpsider/PembrokePSqman
 theme: readthedocs
+edit_uri: edit/master/docs/
 pages:
 - Home: index.md
 - PembrokePSqman Basics:
   - What is PembrokePSqman: about.md
   - Quick Start: Quick-Start-Installation-and-Example.md
-- Basic Commands:
-- Examples:
-- Acknowledgements: acknowledgements.md
+- Public Functions:
+  - Invoke-DeployQman: Invoke-DeployQman.md
+  - Invoke-RegisterQman: Invoke-RegisterQman.md
+  - Start-Qman: Start-Qman.md
